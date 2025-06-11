@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "149897776264",
+    "project_id": "image2text-ark95",
+    "storage_bucket": "image2text-ark95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149897776264:android:d545ede59c867328fce33d",
+        "android_client_info": {
+          "package_name": "com.ark95.image2text"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTEHCn6nB7ZL163Y2DhY6l1MU54OQxcrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
