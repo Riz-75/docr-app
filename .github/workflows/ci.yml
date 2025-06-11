@@ -1,0 +1,64 @@
+name: CI/CD with AI Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ai-test-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          
+      - name: Setup Node.js for AI scripts
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          npm install axios dotenv
+          
+      - name: Generate AI Test Cases
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/ai_test_generator.js
+        
+      - name: Run Flutter Tests
+        run: flutter test --coverage
+        
+      - name: Run AI Generated Tests
+        run: flutter test test/ai_generated/
+        
+      - name: Upload Coverage Reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/lcov.info
+
+  build:
+    needs: ai-test-generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          
+      - name: Build APK
+        run: flutter build apk --release
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
